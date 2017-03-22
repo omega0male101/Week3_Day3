@@ -1,6 +1,6 @@
 require('pg')
 require_relative('../db/sql_runner')
-require_relative('album')
+require_relative('artist')
 
 class Album
 
@@ -44,14 +44,6 @@ class Album
     SqlRunner.run(sql)
   end
 
-  def customer()
-    sql = "SELECT * FROM customers WHERE id = #{@artist_id}"
-    result = SqlRunner.run(sql)
-    customer_data = result.first
-    customer = Artist.new(customer_data)
-    return customer
-  end
-
   def delete()
     sql = "DELETE FROM albums where id = #{@id}"
     SqlRunner.run(sql)
@@ -74,5 +66,13 @@ class Album
     orders = SqlRunner.run(sql)
     return orders.map { |order| Album.new( order ) }
   end
+
+  # def customer()
+  #   sql = "SELECT * FROM customers WHERE id = #{@artist_id}"
+  #   result = SqlRunner.run(sql)
+  #   customer_data = result.first
+  #   customer = Artist.new(customer_data)
+  #   return customer
+  # end
 
 end

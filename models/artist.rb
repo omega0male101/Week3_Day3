@@ -29,11 +29,11 @@ class Artist
     return artists
   end
 
-  # def pizza_orders()
-  #   sql = "SELECT * FROM pizza_orders WHERE customer_id = #{@id}"
-  #   result = SqlRunner.run(sql)
-  #   orders  = result.map { |order| PizzaOrder.new(order) }
-  #   return orders
-  # end
+  def album
+    sql = "SELECT * FROM albums WHERE artist_id = #{@id}"
+    result = SqlRunner.run(sql)
+    belongs  = result.map { |data| Album.new(data) }
+    return belongs
+  end
 
 end

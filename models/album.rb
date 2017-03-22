@@ -67,12 +67,12 @@ class Album
     return orders.map { |order| Album.new( order ) }
   end
 
-  # def customer()
-  #   sql = "SELECT * FROM customers WHERE id = #{@artist_id}"
-  #   result = SqlRunner.run(sql)
-  #   customer_data = result.first
-  #   customer = Artist.new(customer_data)
-  #   return customer
-  # end
+  def artist
+    sql = "SELECT * FROM artists WHERE id = #{@artist_id}"
+    result = SqlRunner.run(sql)
+    album_data = result.first
+    artist = Artist.new(album_data)
+    return artist
+  end
 
 end

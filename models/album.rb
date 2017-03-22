@@ -17,13 +17,13 @@ class Album
   def save()
     sql = "
     INSERT INTO albums (
-      topping,
-      quantity,
-      customer_id
+      title,
+      genre,
+      artist_id
     ) VALUES (
-      '#{ @topping }',
-      #{ @quantity },
-      #{ @customer_id }
+      '#{ @title }',
+      #{ @genre },
+      #{ @artist_id }
     )
     RETURNING id;"
     result = SqlRunner.run(sql)
@@ -32,47 +32,47 @@ class Album
 
   def update()
     sql = "
-    UPDATE pizza_orders SET (
-      topping,
-      quantity,
-      customer_id
+    UPDATE albums SET (
+      title,
+      genre,
+      artist_id
     ) = (
-      '#{@topping}',
-      #{@quantity},
-      #{@customer_id} )
+      '#{@title}',
+      #{@genre},
+      #{@artist_id} )
     WHERE id = #{@id}"
     SqlRunner.run(sql)
   end
 
+  def customer()
+    sql = "SELECT * FROM customers WHERE id = #{@artist_id}"
+    result = SqlRunner.run(sql)
+    customer_data = result.first
+    customer = Artist.new(customer_data)
+    return customer
+  end
+
   def delete()
-    sql = "DELETE FROM pizza_orders where id = #{@id}"
+    sql = "DELETE FROM albums where id = #{@id}"
+    SqlRunner.run(sql)
+  end
+
+  def self.delete_all()
+    sql = "DELETE FROM albums"
     SqlRunner.run(sql)
   end
 
   def self.find(id)
-    db = PG.connect( { dbname: 'pizza_shop', host: 'localhost' } )
-    sql = "SELECT * FROM pizza_orders WHERE id = #{id}"
+    db = PG.connect( { dbname: 'music_app', host: 'localhost' } )
+    sql = "SELECT * FROM albums WHERE id = #{id}"
     db.exec(sql)
     db.close
   end
 
-  def self.delete_all()
-    sql = "DELETE FROM pizza_orders"
-    SqlRunner.run(sql)
-  end
-
   def self.all()
-    sql = "SELECT * FROM pizza_orders;"
+    sql = "SELECT * FROM albums;"
     orders = SqlRunner.run(sql)
-    return orders.map { |order| PizzaOrder.new( order ) }
-  end
-
-  def customer()
-    sql = "SELECT * FROM customers WHERE id = #{@customer_id}"
-    result = SqlRunner.run(sql)
-    customer_data = result.first
-    customer = Customer.new(customer_data)
-    return customer
+    return orders.map { |order| Album.new( order ) }
   end
 
 end
